@@ -1,26 +1,67 @@
-import React from 'react';
-import logo from './logo.svg';
+import React,{useState,useEffect} from 'react';
 import './App.css';
 
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+
+import song from './assets/song.mp3';
+
 function App() {
+
+  const [isPlaying,changePlayState] = useState(localStorage.getItem("isPlaying") ?? false);
+  const [currentCursor,setCursor] = useState(localStorage.getItem("currentTime") ?? 0);
+
+
+  
+  useEffect(() => {
+    const audioElement = document.getElementById("audio-input");
+    audioElement.currentTime = currentCursor;
+    if(isPlaying){
+      audioElement.play();  
+    }
+  }, []);
+  
+  const playSong = () => {
+    const audioElement = document.getElementById("audio-input");
+    localStorage.setItem("isPlaying",true);
+    audioElement.play();
+
+  }
+
+  const pauseSong = () => {
+    const audioElement = document.getElementById("audio-input");
+    localStorage.setItem("isPlaying",false);
+    audioElement.pause();
+  }
+
+  const setCurrentTime = (time) => {
+    localStorage.setItem("currentTime",time.currentTime);
+    setCursor(time.currentTime);
+  }
+
+  const changePlayStateHandler = () => {
+    if(!isPlaying){
+      playSong();
+    }else{
+      pauseSong();
+    }
+    changePlayState(!isPlaying);  
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ToggleButton value={isPlaying}
+      onChange={changePlayStateHandler}
+      >
+        {isPlaying ? <PauseCircleFilledIcon /> : <PlayCircleFilledIcon  />}
+      </ToggleButton>
+      <audio id="audio-input" src={song} preload="auto" loop onTimeUpdate={(e) => setCurrentTime(e.target)}>
+        <p>Tu navegador no implementa el elemento audio.</p>
+      </audio>
     </div>
   );
 }
 
 export default App;
+
