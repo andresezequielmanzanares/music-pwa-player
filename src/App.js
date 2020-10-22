@@ -9,10 +9,11 @@ import song from './assets/song.mp3';
 
 function App() {
 
+  //Se que lo deberia hacer con service workers pero no tengo tiempo para aprenderlo y hacerlo bien en 48 horas asi que hice lo mejor que pude con lo que se.
+
+
   const [isPlaying,changePlayState] = useState(localStorage.getItem("isPlaying") ?? false);
   const [currentCursor,setCursor] = useState(localStorage.getItem("currentTime") ?? 0);
-
-
   
   useEffect(() => {
     const audioElement = document.getElementById("audio-input");
