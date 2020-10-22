@@ -16,18 +16,14 @@ function App() {
   const [currentCursor,setCursor] = useState(localStorage.getItem("currentTime") ?? 0);
   
   useEffect(() => {
-    const audioElement = document.getElementById("audio-input");
-    audioElement.currentTime = currentCursor;
-    if(isPlaying){
-      audioElement.play();  
-    }
+    changePlayState(false);
   }, []);
   
   const playSong = () => {
     const audioElement = document.getElementById("audio-input");
     localStorage.setItem("isPlaying",true);
+    audioElement.currentTime = currentCursor;
     audioElement.play();
-
   }
 
   const pauseSong = () => {
